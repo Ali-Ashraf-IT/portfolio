@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ali Ashraf Jamali – Network &amp; Systems Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B1626;--bg2:#0A1424;--panel:#11233A;--line:#1B3350;--chip:#2A4A6B;--text:#E6EDF5;--muted:#C9D6E5;--head:#FFFFFF;--acc:#2DD4BF;--onacc:#0B1626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#F4F7FB;--bg2:#FFFFFF;--panel:#FFFFFF;--line:#D3DEEA;--chip:#9DB2C8;--text:#14263D;--muted:#33475E;--head:#0B1626;--acc:#0B7F73;--onacc:#FFFFFF}}
+:root[data-theme="dark"]{--bg:#0B1626;--bg2:#0A1424;--panel:#11233A;--line:#1B3350;--chip:#2A4A6B;--text:#E6EDF5;--muted:#C9D6E5;--head:#FFFFFF;--acc:#2DD4BF;--onacc:#0B1626}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 'IBM Plex Sans',Arial,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg2);z-index:60}
+a{color:var(--acc);text-decoration:none}a:hover{color:var(--head)}
+h1,h2,h3{font-family:'IBM Plex Mono',monospace;color:var(--head);margin:0}
+.mono{font-family:'IBM Plex Mono',monospace}
+.container{width:100%;margin:0 auto;padding:0 20px}
+@media(min-width:576px){.container{max-width:540px}}
+@media(min-width:768px){.container{max-width:720px}}
+@media(min-width:992px){.container{max-width:960px}}
+@media(min-width:1200px){.container{max-width:1140px}}
+@media(min-width:1400px){.container{max-width:1320px}}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bg2);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:56px;flex-wrap:wrap}
+.brand{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--head)}
+.toggle{display:none;min-width:46px;min-height:46px;background:none;border:1px solid var(--chip);color:var(--head);cursor:pointer}
+.links{display:flex;gap:4px;font-family:'IBM Plex Mono',monospace;font-size:14px}
+.links a{display:flex;align-items:center;min-height:46px;padding:0 12px}
+@media(max-width:767px){.toggle{display:block}.links{display:none;width:100%;flex-direction:column;padding-bottom:8px}.links.open{display:flex}}
+section{padding:72px 0 0}
+.lbl{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:3px;color:var(--acc);margin-bottom:8px}
+h2{font-size:clamp(22px,4vw,30px);margin-bottom:26px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.grid{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:768px){.g2{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:992px){.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:768px){.g3{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--acc);padding:22px;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:17px}.card p{margin:0;color:var(--muted);font-size:15px}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--acc)}
+.chip{border:1px solid var(--chip);color:var(--muted);padding:3px 10px;font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+.chip.k{border-color:var(--acc);color:var(--head)}
+.btn{display:inline-flex;align-items:center;min-height:46px;padding:0 22px;font:600 14px 'IBM Plex Mono',monospace;border:1px solid var(--acc)}
+.btn.p{background:var(--acc);color:var(--onacc)}.btn.s{color:var(--head)}
+.hero{display:flex;flex-wrap:wrap;gap:40px;align-items:center;padding-top:64px}
+.hero>div{flex:1 1 340px;min-width:0}
+.term{background:var(--bg2);border:1px solid var(--line);font:14px/1.9 'IBM Plex Mono',monospace;overflow-x:auto}
+.stat{font:600 38px 'IBM Plex Mono',monospace;color:var(--acc)}
+.split{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}
+footer{padding:48px 0 32px;color:var(--muted);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<header><div class="container nav">
+<div class="brand">ali@infra:~$</div>
+<button class="toggle" id="t" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+<nav class="links" id="l"><a href="#about">about</a><a href="#skills">skills</a><a href="#projects">projects</a><a href="#experience">experience</a><a href="#contact">contact</a></nav>
+</div></header>
+<main class="container">
+<div class="hero">
+<div>
+<div class="lbl">AVAILABLE FOR INFRASTRUCTURE ROLES</div>
+<h1 style="font-size:clamp(32px,6vw,52px);line-height:1.1">Ali Ashraf Jamali</h1>
+<div class="mono" style="font-size:clamp(16px,2.4vw,20px);color:var(--acc);margin:14px 0">Network &amp; Systems Engineer</div>
+<p style="font-size:18px;color:var(--muted);max-width:560px;margin:0 0 22px">I keep enterprise networks and servers visible, secure and automated, from Cisco and Fortinet cores to Zabbix monitoring at scale and n8n workflows.</p>
+<div class="row" style="gap:12px"><a class="btn p" href="#projects">View projects</a><a class="btn s" href="#contact">Get in touch</a></div>
+</div>
+<div>
+<div class="term"><div style="padding:10px 16px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px">status.sh</div>
+<div style="padding:18px 20px;color:var(--muted);white-space:nowrap">
+<div><span style="color:var(--acc)">monitoring</span> : Zabbix, 250+ agents</div>
+<div><span style="color:var(--acc)">collectors</span> : SNMP + Zabbix Agent</div>
+<div><span style="color:var(--acc)">platforms</span> : Linux, Windows Server</div>
+<div><span style="color:var(--acc)">databases</span> : PostgreSQL, MongoDB</div>
+<div><span style="color:var(--acc)">automation</span> : n8n, Wake-on-LAN bot</div>
+<div><span style="color:var(--acc)">security</span> : FortiGate, Wazuh</div>
+<div><span style="color:var(--acc)">experience</span> : 3+ years, enterprise</div>
+</div></div>
+</div>
+</div>
+
+<section style="padding-top:48px"><div class="grid g4">
+<div class="card"><div class="stat">3+</div><p>Years across enterprise environments</p></div>
+<div class="card"><div class="stat">250+</div><p>Zabbix agents deployed and configured</p></div>
+<div class="card"><div class="stat">2</div><p>Organisations: K-Electric and Oxiliry</p></div>
+<div class="card"><div class="stat">Multi</div><p>Vendor: Cisco, Fortinet, SonicWall, Ubiquiti</p></div>
+</div></section>
+
+<section id="about"><div class="lbl">01 / ABOUT</div><h2>Network and systems, end to end</h2>
+<p style="margin:0;max-width:820px;font-size:17px;line-height:1.75;color:var(--muted)">I spent a year in the K-Electric NOC working on Cisco routers, Catalyst and Nexus switches, Fortinet firewalls and WAN link monitoring. At Oxiliry.com I now run switching, firewalls, Windows Server, virtualisation, Linux, databases and monitoring. I work comfortably across multi-vendor setups, and I like building automation that removes manual work.</p></section>
+
+<section id="skills"><div class="lbl">02 / SKILLS</div><h2>Toolbox</h2><div class="grid g3">
+<div class="card"><h3>Monitoring</h3><div class="row"><span class="chip k">Zabbix</span><span class="chip k">SNMP</span><span class="chip">Wazuh</span><span class="chip">SolarWinds</span><span class="chip">Cacti</span></div></div>
+<div class="card"><h3>Networking</h3><div class="row"><span class="chip">Cisco ISR / Catalyst / Nexus</span><span class="chip">OSPF</span><span class="chip">EIGRP</span><span class="chip">HSRP / VRRP</span><span class="chip">VLAN / STP</span><span class="chip">MPLS WAN</span><span class="chip">Cisco WLC</span><span class="chip">UniFi</span></div></div>
+<div class="card"><h3>Security</h3><div class="row"><span class="chip">FortiGate HA / VPN</span><span class="chip">SonicWall</span><span class="chip">pfSense</span><span class="chip">Squid</span><span class="chip">ACL / NAT</span></div></div>
+<div class="card"><h3>Systems &amp; Data</h3><div class="row"><span class="chip k">Linux</span><span class="chip">Windows Server</span><span class="chip">Active Directory</span><span class="chip">VMware</span><span class="chip">Hyper-V</span><span class="chip">Veeam</span><span class="chip">Synology NAS</span><span class="chip k">PostgreSQL</span><span class="chip k">MongoDB</span></div></div>
+<div class="card"><h3>Automation &amp; Tools</h3><div class="row"><span class="chip k">n8n</span><span class="chip k">Wake-on-LAN bot</span><span class="chip">Tactical RMM</span><span class="chip">FreePBX</span><span class="chip">Zoho Desk</span><span class="chip">Avaya SMGR</span></div></div>
+</div></section>
+
+<section id="projects"><div class="lbl">03 / PROJECTS</div><h2>Selected work</h2><div class="grid g2">
+<div class="card"><div class="tag">MONITORING</div><h3>Zabbix rollout</h3><p>Installed Zabbix and deployed and configured 250+ agents, using both SNMP and the Zabbix Agent to cover servers and network devices.</p><div class="row"><span class="chip">Zabbix</span><span class="chip">SNMP</span><span class="chip">Agents</span></div></div>
+<div class="card"><div class="tag">AUTOMATION</div><h3>n8n and Wake-on-LAN bot</h3><p>Deployed n8n, created a Wake-on-LAN bot that powers on devices remotely, and built automation workflows around it.</p><div class="row"><span class="chip">n8n</span><span class="chip">Wake-on-LAN</span><span class="chip">Workflows</span></div></div>
+<div class="card"><div class="tag">GENAI AND AGENTIC AI PROGRAM</div><h3>Custom Wazuh dashboard</h3><p>Took part in the Generative AI and Agentic AI Application Development program by Aspire Pakistan and created a customized dashboard for Wazuh.</p><div class="row"><span class="chip">Wazuh</span><span class="chip">Aspire Pakistan</span></div></div>
+<div class="card"><div class="tag">PLATFORMS</div><h3>Linux and databases</h3><p>Linux installation, deployment and configuration, plus PostgreSQL and MongoDB database deployments.</p><div class="row"><span class="chip">Linux</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span></div></div>
+</div></section>
+
+<section id="experience"><div class="lbl">04 / EXPERIENCE</div><h2>Where I have worked</h2><div class="grid">
+<div class="card"><div class="split"><h3>System Engineer, Oxiliry.com</h3><span class="tag">Jan 2024 - Present</span></div><p>Windows Server 2012/2016 (Active Directory, Group Policy, DNS, DHCP). VMware and Hyper-V, Veeam backups and VM migrations, Synology NAS. Cisco Catalyst and Nexus switching, FortiGate HA and VPN, pfSense, SonicWall. UniFi wireless, FreePBX VoIP, remote support through RDP and Tactical RMM, ticketing in Zoho Desk.</p></div>
+<div class="card"><div class="split"><h3>Network Engineer (NOC), K-Electric, Karachi</h3><span class="tag">Jan 2023 - Dec 2023</span></div><p>Configured core and branch Cisco routers and switches (VLANs, OSPF, HSRP, VRRP, Port-Channel). Monitored health in SolarWinds and MPLS WAN failover. Managed Cisco WLC controllers, FortiGate HA and VPN, and branch ACLs.</p></div>
+<div class="card" style="border-top-color:var(--chip)"><h3>Education</h3><p>B.C.I.T (CGPA 3.08), University of Sindh, Jamshoro. Certificate in Network Administration, Hidaya Institute of Science &amp; Technology, Jamshoro. Languages: English, Urdu, Sindhi.</p></div>
+</div></section>
+
+<section id="contact"><div class="card" style="padding:clamp(24px,5vw,40px);gap:14px">
+<div class="lbl" style="margin:0">05 / CONTACT</div><h2 style="margin:0">Let's work together</h2>
+<p>Jamshoro, Sindh, Pakistan</p>
+<div class="row" style="gap:12px"><a class="btn p" href="mailto:eng.ashraf867@gmail.com">eng.ashraf867@gmail.com</a><a class="btn s" href="tel:03113222527">0311-3222527</a><a class="btn s" href="https://wa.me/03433262927">WhatsApp 0343-3262927</a></div>
+</div></section>
+</main>
+<footer class="container">&copy; Ali Ashraf Jamali</footer>
+<script>
+var t=document.getElementById('t'),l=document.getElementById('l');
+t.addEventListener('click',function(){var o=l.classList.toggle('open');t.setAttribute('aria-expanded',o)});
+l.addEventListener('click',function(e){if(e.target.tagName==='A'){l.classList.remove('open');t.setAttribute('aria-expanded',false)}});
+</script>
+</body>
+</html>
