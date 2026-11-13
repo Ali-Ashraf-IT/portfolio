@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ali-ashraf-it.github.io/portfolio/sitemap-index.xml
