@@ -7,6 +7,7 @@ const links = [
   { href: '#skills', label: 'Skills' },
   { href: '#experience', label: 'Experience' },
   { href: '#projects', label: 'Projects' },
+  { href: '#cv', label: 'CV' },
   { href: '#contact', label: 'Contact' },
 ];
 // On project pages the anchors must point back to the home page
@@ -31,7 +32,7 @@ const home = `${base}/`;
         <!-- moon (shown in light mode) -->
         <svg class="size-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
-      <a href={`${base}/${profile.cv}`} download class="hidden rounded-lg bg-signal px-4 py-2.5 text-sm font-bold text-signal-ink hover:brightness-110 sm:inline-flex">Download CV</a>
+      <a href={`${base}/${profile.cv}`} download class="hidden rounded-full bg-signal px-5 py-2.5 text-sm font-bold text-signal-ink shadow-[0_8px_24px_-12px_var(--signal)] hover:brightness-110 sm:inline-flex">Download CV</a>
       <button id="menu-toggle" type="button" class="grid size-10 place-items-center rounded-lg border border-line lg:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -43,7 +44,7 @@ const home = `${base}/`;
       {links.map((l) => (
         <li><a href={`${home}${l.href}`} class="block rounded-lg px-3 py-3 font-semibold hover:bg-surface-2">{l.label}</a></li>
       ))}
-      <li><a href={`${base}/${profile.cv}`} download class="mt-2 block rounded-lg bg-signal px-3 py-3 text-center font-bold text-signal-ink">Download CV</a></li>
+      <li><a href={`${base}/${profile.cv}`} download class="mt-2 block rounded-full bg-signal px-3 py-3 text-center font-bold text-signal-ink">Download CV</a></li>
     </ul>
   </div>
 </header>

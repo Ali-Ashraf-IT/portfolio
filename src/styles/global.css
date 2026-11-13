@@ -84,8 +84,53 @@ body {
   border: 1px solid var(--line);
   border-radius: 14px;
 }
-a.tile, .tile-hover { transition: border-color .2s ease, transform .2s ease; }
-a.tile:hover, .tile-hover:hover { border-color: var(--signal); }
+/* Dark mode tiles get a faint glass highlight on the top edge (reference 3) */
+.dark .tile {
+  background:
+    linear-gradient(180deg, rgba(120, 160, 255, 0.06), transparent 40%),
+    var(--surface);
+}
+a.tile, .tile-hover { transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease; }
+a.tile:hover, .tile-hover:hover {
+  border-color: color-mix(in srgb, var(--signal) 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--signal) 25%, transparent), 0 18px 40px -24px var(--signal);
+  transform: translateY(-2px);
+}
+
+/* Buttons: pill shapes with an icon badge (reference 3 "Follow" button) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  border-radius: 999px;
+  padding: .55rem .6rem .55rem 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: filter .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.btn-badge {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.btn-primary {
+  background: var(--signal);
+  color: var(--signal-ink);
+  box-shadow: 0 10px 30px -12px var(--signal);
+}
+.btn-primary .btn-badge { background: var(--signal-ink); color: var(--signal); }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--ink);
+}
+.btn-ghost .btn-badge { background: var(--surface-2); color: var(--signal); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--signal); }
 
 .chip {
   display: inline-flex;
