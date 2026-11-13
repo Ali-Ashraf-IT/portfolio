@@ -11,8 +11,8 @@ import { profile, skills, experience, education, certifications, languages, proj
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const skillIcons = ['server', 'network', 'bolt', 'shield', 'cloud', 'tool'];
 
-// Bento pattern for project tiles: wide, narrow / narrow, wide / wide, narrow
-const largeAt = new Set([0, 3, 4]);
+// Bento pattern for project tiles (3 columns): wide+narrow / narrow+wide / three narrow
+const largeAt = new Set([0, 3]);
 const ordered = [...projects].sort((a, b) => Number(b.featured) - Number(a.featured));
 const categories = ['All', ...new Set(ordered.map((p) => p.category))];
 
@@ -28,8 +28,13 @@ const qrSvg = await QRCode.toString(profile.linkedin, {
   <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6" aria-labelledby="about">
     <SectionHead id="about" title="About" />
     <div class="grid gap-3 md:grid-cols-3">
-      <div class="tile p-6 md:col-span-2 md:row-span-2 sm:p-8" data-reveal>
-        {profile.about.map((para) => <p class="mb-4 text-lg leading-relaxed last:mb-0">{para}</p>)}
+      <div class="tile flex flex-col gap-6 p-6 sm:flex-row sm:p-8 md:col-span-2 md:row-span-2" data-reveal>
+        {profile.photo && (
+          <img src={`${base}/${profile.photo}`} alt="" width="160" height="200" loading="lazy" class="h-44 w-36 shrink-0 rounded-xl border border-line object-cover object-top sm:h-52 sm:w-40" />
+        )}
+        <div>
+          {profile.about.map((para) => <p class="mb-4 text-lg leading-relaxed last:mb-0">{para}</p>)}
+        </div>
       </div>
       <div class="tile p-6" data-reveal>
         <Icon name="cap" class="size-7 text-signal" />
@@ -122,6 +127,34 @@ const qrSvg = await QRCode.toString(profile.linkedin, {
     </section>
   )}
 
+  <!-- CV: view it on the page and download the PDF -->
+  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6" aria-labelledby="cv">
+    <SectionHead id="cv" title="Curriculum vitae" intro="Read it here, open it full size, or download the PDF. One page, written to pass applicant tracking systems." />
+    <div class="grid gap-3 lg:grid-cols-[1fr_20rem]">
+      <div class="tile overflow-hidden p-2 sm:p-3" data-reveal>
+        <!-- Live preview of the /cv page, scaled to fit the tile -->
+        <div class="cv-frame relative overflow-hidden rounded-lg bg-white" style="aspect-ratio: 210 / 297;">
+          <iframe src={`${base}/cv/`} title="CV preview" loading="lazy" tabindex="-1" class="absolute left-0 top-0 origin-top-left border-0" style="width:794px;height:1123px;"></iframe>
+        </div>
+      </div>
+      <div class="flex flex-col gap-3">
+        <a href={`${base}/${profile.cv}`} download class="tile flex flex-col border-signal bg-signal p-6 text-signal-ink" data-reveal>
+          <Icon name="download" class="size-8" />
+          <span class="mt-6 text-sm font-semibold opacity-80">PDF, A4</span>
+          <span class="font-display text-3xl font-bold uppercase">Download CV</span>
+        </a>
+        <a href={`${base}/cv/`} class="tile flex flex-col p-6" data-reveal>
+          <Icon name="arrow" class="size-8 text-signal" />
+          <span class="mt-6 text-sm font-semibold text-muted">Web version</span>
+          <span class="font-display text-3xl font-bold uppercase">Open full CV</span>
+        </a>
+        <div class="tile p-6 text-sm text-muted" data-reveal>
+          <p><span class="font-bold text-ink">Includes:</span> summary, skills, experience at Oxiliry.com and K-Electric, six projects, education and certification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT: tile board (references 1 and 5) -->
   <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6" aria-labelledby="contact">
     <SectionHead id="contact" title="Contact" intro={profile.openTo} />
@@ -145,10 +178,10 @@ const qrSvg = await QRCode.toString(profile.linkedin, {
         <span class="mt-6 text-sm font-semibold text-muted">GitHub</span>
         <span class="font-display text-2xl font-bold">ali-ashraf-it</span>
       </a>
-      <a href={`${base}/${profile.cv}`} download class="tile flex flex-col border-signal bg-signal p-6 text-signal-ink sm:col-span-1 lg:col-span-2" data-reveal>
-        <Icon name="download" class="size-8" />
-        <span class="mt-6 text-sm font-semibold opacity-80">Curriculum vitae</span>
-        <span class="font-display text-2xl font-bold">Download CV (PDF)</span>
+      <a href="#cv" class="tile flex flex-col p-6 sm:col-span-1 lg:col-span-2" data-reveal>
+        <Icon name="download" class="size-8 text-signal" />
+        <span class="mt-6 text-sm font-semibold text-muted">Curriculum vitae</span>
+        <span class="font-display text-2xl font-bold">View or download my CV</span>
       </a>
     </div>
   </section>
@@ -165,4 +198,13 @@ const qrSvg = await QRCode.toString(profile.linkedin, {
       tiles.forEach((t) => { t.hidden = !(f === 'All' || t.dataset.category === f); });
     }),
   );
+
+  // Scale the A4 CV preview (794px wide) to the width of its tile.
+  const frame = document.querySelector<HTMLElement>('.cv-frame');
+  const cvIframe = frame?.querySelector('iframe');
+  if (frame && cvIframe) {
+    const fit = () => { cvIframe.style.transform = `scale(${frame.clientWidth / 794})`; };
+    new ResizeObserver(fit).observe(frame);
+    fit();
+  }
 </script>

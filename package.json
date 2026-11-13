@@ -11,7 +11,8 @@
     "check": "astro check",
     "lint": "eslint .",
     "verify": "npm run check && npm run lint && npm run build",
-    "og": "powershell -NoProfile -File scripts/og.ps1"
+    "og": "powershell -NoProfile -File scripts/og.ps1",
+    "cv:pdf": "powershell -NoProfile -File scripts/cv-pdf.ps1"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
