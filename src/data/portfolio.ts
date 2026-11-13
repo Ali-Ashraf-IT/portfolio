@@ -28,6 +28,8 @@ export type Project = {
   links: Link[];
   video?: string; // YouTube video id, e.g. 'dQw4w9WgXcQ'
   image?: string; // file in /public/projects/, e.g. 'wol.png'
+  // Screenshot slider: files in /public/projects/ with a caption each
+  gallery?: { src: string; caption: string }[];
   date: string; // shown on the card
 };
 
@@ -35,31 +37,36 @@ export type Project = {
 export const profile = {
   name: 'Ali Ashraf',
   role: 'System Engineer (IT Operations)',
-  company: 'Oxiliry',
+  // Short line under the role in the hero: the areas you work across
+  focus: ['Networking', 'Systems', 'Monitoring', 'Automation'],
+  company: 'Oxiliry.com',
   location: 'Pakistan',
   // One-line value proposition shown in the hero.
   tagline:
     'I keep enterprise networks and servers running, then automate the IT work around them: monitoring, compliance checks and security operations.',
   about: [
-    'I am a System Engineer in IT Operations at Oxiliry, where I look after Windows Server and Active Directory, virtualisation and backups, switching, firewalls, wireless and VoIP.',
-    'Before that I spent a year as a Network Engineer in the K-Electric NOC, configuring Cisco routing and switching, FortiGate firewalls and MPLS WAN failover.',
-    'Most of my recent work is automation. I build n8n workflows with AI agents that take requests from chat, act through our RMM and ticketing systems, and check their own results. I also build Python security tools around Wazuh, MITRE ATT&CK and threat intelligence.',
+    'I work on both sides of IT infrastructure: the network and the systems that run on it. I am a System Engineer in IT Operations at Oxiliry.com, where I look after Windows Server and Active Directory, virtualisation and backups, Cisco switching, FortiGate, SonicWall and pfSense firewalls, wireless and VoIP, and monitoring with Zabbix, Cacti and SNMP.',
+    'Before that I spent a year as a Network Engineer in the K-Electric NOC in Karachi, configuring core and branch Cisco routers and switches (VLANs, OSPF, HSRP, VRRP, Port-Channels), watching the network in SolarWinds and tracking MPLS WAN failover.',
+    'I also build tools that save IT time: a read-only WSUS patch dashboard for 334 computers, n8n workflows with AI agents that act through our RMM and ticketing systems, and Python security tools around Wazuh and threat intelligence.',
   ],
   email: 'eng.ashraf867@gmail.com',
   phone: '', // left empty on purpose: add only if you want it public
   linkedin: 'https://www.linkedin.com/in/ali-ashraf-053b03bb',
   github: 'https://github.com/ali-ashraf-it',
-  photo: '', // add a file to /public/ (e.g. 'ali.jpg') and write its name here
+  photo: 'ali.jpg', // cropped from the GitHub profile picture; replace with a sharper photo when you have one
   cv: 'Ashraf_CV.pdf', // file in /public/
   openTo: 'Open to infrastructure, automation and security operations roles, on-site or remote.',
 };
 
-// Stats row under the hero. Only numbers you have stated or that the code shows.
+// Highlight tiles under the hero: network AND systems, not only automation.
+// Only numbers you have stated or that your own tools show.
 export const stats = [
-  { value: '3+', label: 'years in enterprise IT' },
-  { value: '250+', label: 'Zabbix agents deployed' },
-  { value: '4', label: 'n8n automations built' },
-  { value: '6', label: 'public GitHub repositories' },
+  { value: '3+', label: 'Years in enterprise IT', detail: 'NOC network engineer, then system engineer' },
+  { value: 'L2/L3', label: 'Cisco routing & switching', detail: 'Routers, Catalyst and Nexus: VLAN, OSPF, HSRP/VRRP, MPLS WAN' },
+  { value: 'HA', label: 'Firewalls & VPN', detail: 'FortiGate HA pairs, SonicWall, pfSense, ACL and NAT' },
+  { value: '250+', label: 'Zabbix agents deployed', detail: 'Network and server monitoring with SNMP, Cacti, SolarWinds' },
+  { value: '334', label: 'PCs in my WSUS dashboard', detail: 'Patch compliance, failures and reporting gaps' },
+  { value: '4', label: 'n8n automations', detail: 'AI agents with Google Chat, RMM, Zoho Desk, Google Sheets' },
 ];
 
 // ---------------------------------------------------------------- skills
@@ -100,17 +107,18 @@ export const skills: { group: string; note: string; items: string[] }[] = [
 export const experience = [
   {
     role: 'System Engineer (IT Operations)',
-    company: 'Oxiliry',
+    company: 'Oxiliry.com',
     place: '',
     start: 'Jan 2024',
     end: 'Present',
     points: [
-      'Administer Windows Server 2012/2016: Active Directory, Group Policy, DNS, DHCP and user accounts.',
+      'Manage Windows Server 2012/2016: Active Directory, Group Policy, DNS, DHCP and user accounts.',
       'Run VMware and Hyper-V; configure Veeam Backup & Replication jobs and VM migrations; maintain Synology NAS storage.',
       'Maintain Cisco Catalyst and Nexus switching (VLANs, VTP, SVI, Port-Channel, STP).',
       'Support FortiGate 200F/101F/40F HA and VPN tunnels, pfSense rules with Squid proxy, and SonicWall policies.',
       'Deploy UniFi wireless with department SSIDs, and FreePBX VoIP with Grandstream and Cisco handsets.',
       'Deployed Zabbix with 250+ agents over SNMP and Zabbix Agent; monitor with Cacti; support users through Zoho Desk, RDP and Tactical RMM.',
+      'Built a read-only WSUS monitoring dashboard (Node.js and PowerShell) that tracks patch compliance, failed updates and reporting gaps for 334 computers.',
       'Designed and built n8n automations for Wake-on-LAN requests, software license audits and hardware upgrade tracking.',
     ],
   },
@@ -138,10 +146,85 @@ export const certifications: { title: string; issuer: string; year: string; link
   { title: 'Certificate in Network Administration', issuer: 'Hidaya Institute of Science & Technology, Jamshoro', year: '' },
 ];
 
-export const languages = ['English', 'Urdu', 'Sindhi'];
+export const languages = ['English', 'Urdu'];
+
+// ---------------------------------------------------------------- CV
+// Extra text used only on the CV page (/cv) and the PDF.
+// Skills, experience, education and certifications are shared with the site.
+// It is shorter than the website on purpose so the PDF fits one A4 page.
+export const cv = {
+  summary:
+    'Network and systems engineer with 3+ years in enterprise IT: a year in the K-Electric NOC on Cisco routing, switching and MPLS WAN, then System Engineer at Oxiliry.com running Windows Server, AD, virtualisation, backup, firewalls and Zabbix. Builds tools that cut manual IT work, including a WSUS patch dashboard and n8n AI automations.',
+  skills: [
+    { group: 'Infrastructure', line: 'Windows Server 2012/2016, Active Directory, Group Policy, DNS/DHCP, VMware, Hyper-V, Veeam, Synology NAS, Linux, FreePBX, PostgreSQL, MongoDB' },
+    { group: 'Networking', line: 'Cisco ISR, Catalyst, Nexus 9000/9300, VLAN/VTP/SVI, OSPF, EIGRP, HSRP/VRRP, STP, Port-Channel, MPLS WAN, Cisco WLC, UniFi' },
+    { group: 'Automation', line: 'n8n, AI agents (Gemini, OpenAI, Groq), Python, JavaScript, REST APIs, webhooks, Zoho Desk API, Google Sheets and Gmail API' },
+    { group: 'Security & Compliance', line: 'FortiGate HA/VPN, SonicWall, pfSense, Squid, ACL/NAT, Wazuh, MITRE ATT&CK, VirusTotal, software license audit' },
+    { group: 'Tools & DevOps', line: 'Zabbix, SNMP, SolarWinds, Cacti, Tactical RMM, Zoho Desk, Avaya SMGR, Git/GitHub' },
+  ],
+  // Shorter bullets for each job, same facts as the website (matched by company)
+  experience: {
+    'Oxiliry.com': [
+      'Manage Windows Server 2012/2016 with Active Directory, Group Policy, DNS and DHCP; run VMware, Hyper-V, Veeam backups and Synology NAS.',
+      'Maintain Cisco Catalyst and Nexus switching; support FortiGate HA and VPN, pfSense with Squid, and SonicWall.',
+      'Deployed Zabbix with 250+ agents (SNMP, Zabbix Agent); monitor with Cacti; deploy UniFi Wi-Fi and FreePBX VoIP.',
+      'Built a read-only WSUS dashboard tracking patch compliance, failed updates and reporting gaps for 334 computers.',
+      'Designed and built n8n automations for Wake-on-LAN requests, software license audits and hardware upgrade tracking.',
+    ],
+    'K-Electric': [
+      'Configured core and branch Cisco ISR routers, Catalyst and Nexus switches: VLANs, VTP, SVI, OSPF, HSRP, VRRP and L2/L3 Port-Channels.',
+      'Monitored network health in SolarWinds and tracked MPLS WAN links with primary and secondary failover.',
+      'Managed Cisco WLC 5508 and 9800 controllers, FortiGate HA and VPN, and branch ACLs.',
+    ],
+  } as Record<string, string[]>,
+  // One line per project: what it does + main technologies. Facts only.
+  projects: [
+    { name: 'WSUS Monitor dashboard (Node.js, PowerShell)', line: 'Read-only patch dashboard for 334 computers: PowerShell exporter on the WSUS server, zero-dependency Node.js app with login and audit log, CSV/Excel reports and per-PC fix scripts.' },
+    { name: 'AI Wake-on-LAN assistant (n8n, 36 nodes)', line: 'Google Chat bot; an AI agent validates wake requests, triggers Tactical RMM, verifies by ping and logs a Zoho Desk ticket.' },
+    { name: 'License discovery & audit portal (n8n, 21 nodes)', line: 'Webhook-served form returning a per-employee software license audit from Zoho Desk tickets.' },
+    { name: 'IT hardware upgrade automation (n8n, 14 nodes)', line: 'Monthly job emailing approved upgrade requests from Google Sheets as an HTML dashboard.' },
+    { name: 'SentinelIQ (Python)', line: 'Streamlit SOC console with 11 views over a Wazuh-connected API, with a Groq AI analyst.' },
+    { name: 'AI SOC Analyst (Python, hackathon team project)', line: 'Raw logs to IOCs, LLM investigation, MITRE ATT&CK mapping and a response playbook.' },
+  ],
+};
 
 // ---------------------------------------------------------------- projects
 export const projects: Project[] = [
+  {
+    slug: 'wsus-monitor-dashboard',
+    title: 'WSUS Monitor dashboard',
+    category: 'Monitoring',
+    featured: true,
+    date: 'Oct 2026',
+    summary: 'A read-only web dashboard that shows patch compliance for 334 computers: who is up to date, which updates failed and why, and which PCs stopped reporting to WSUS, with reports and fix scripts.',
+    role: 'Designed, built and deployed on my own at Oxiliry.com.',
+    problem: 'The WSUS console shows totals but makes it slow to see which computers are failing, which have gone silent, and what to do about each one, and its numbers are hard to hand to management.',
+    built: 'PowerShell scripts on the WSUS server export the data every 15 minutes and serve it over a small REST service. A Node.js app with zero npm packages turns it into an executive overview, client compliance, reporting gaps, failed updates, installation history and trends, with CSV and Excel reports and a "How to fix" script per computer.',
+    flow: [
+      { label: 'WSUS server', detail: 'SUSDB, read only' },
+      { label: 'PowerShell exporter', detail: 'every 15 minutes' },
+      { label: 'REST service', detail: 'live data, cached fallback' },
+      { label: 'Node.js dashboard', detail: 'login, audit log' },
+      { label: 'Reports', detail: 'CSV, Excel, PDF' },
+      { label: 'Fix scripts', detail: 'via Tactical RMM' },
+    ],
+    safeguards: [
+      'Strictly read-only on WSUS and SUSDB; any change script runs as a dry run unless -Apply is given.',
+      'Never guesses a number: missing data is shown as N/A with the reason, and every metric carries its source and time.',
+      'Shows a red CACHED or INCOMPLETE banner when live data is not available or not complete.',
+      'Logins with scrypt-hashed passwords, 8-hour sessions and a per-user audit trail kept as SOC 2 evidence.',
+      '38 automated tests run against a sample export whose totals match the WSUS console.',
+    ],
+    results: [],
+    stack: ['Node.js', 'PowerShell', 'WSUS / SUSDB', 'REST API', 'JavaScript', 'HTML/CSS', 'Tactical RMM'],
+    links: [],
+    gallery: [
+      { src: 'wsus/overview.jpg', caption: 'Executive overview: 334 computers by WSUS status, with trend and server sync' },
+      { src: 'wsus/reporting.jpg', caption: 'Client reporting: which computers stopped reporting, and since when' },
+      { src: 'wsus/failures.jpg', caption: 'Failed updates: error codes, affected KBs and a fix script per computer' },
+      { src: 'wsus/history.jpg', caption: 'Patch history report with CSV and PDF export' },
+    ],
+  },
   {
     slug: 'ai-wake-on-lan-assistant',
     title: 'AI Wake-on-LAN assistant',
