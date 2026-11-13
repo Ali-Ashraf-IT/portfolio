@@ -3,6 +3,7 @@
 import type { Project } from '../data/portfolio';
 import Flow from './Flow.astro';
 import Icon from './Icon.astro';
+import Gallery from './Gallery.astro';
 interface Props { project: Project; large?: boolean }
 const { project: p, large = false } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -15,7 +16,9 @@ const repo = p.links.find((l) => l.href.includes('github.com'));
     <span class="text-muted">{p.date}</span>
   </div>
 
-  {p.image && (
+  {p.gallery && p.gallery.length > 0 ? (
+    <div class="mt-5"><Gallery images={p.gallery} title={p.title} /></div>
+  ) : p.image && (
     <img src={`${base}/projects/${p.image}`} alt={`Screenshot of ${p.title}`} loading="lazy" class="mt-5 aspect-video w-full rounded-lg border border-line object-cover" />
   )}
 

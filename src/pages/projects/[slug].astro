@@ -3,6 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import Flow from '../../components/Flow.astro';
 import Icon from '../../components/Icon.astro';
+import Gallery from '../../components/Gallery.astro';
 import { projects, profile, type Project } from '../../data/portfolio';
 
 export function getStaticPaths() {
@@ -29,8 +30,8 @@ const next = projects[(idx + 1) % projects.length]!;
       {p.links.length > 0 && (
         <div class="mt-6 flex flex-wrap gap-3">
           {p.links.map((l) => (
-            <a href={l.href} rel="noopener" class="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-5 py-3 font-bold hover:border-signal">
-              <Icon name="github" class="size-5" /> {l.label}
+            <a href={l.href} rel="noopener" class="btn btn-ghost">
+              {l.label} <span class="btn-badge"><Icon name="github" class="size-4" /></span>
             </a>
           ))}
         </div>
@@ -42,7 +43,10 @@ const next = projects[(idx + 1) % projects.length]!;
         <iframe class="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${p.video}`} title={`${p.title} demo video`} loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     )}
-    {p.image && !p.video && (
+    {p.gallery && p.gallery.length > 0 && (
+      <div class="tile mt-10 p-3 sm:p-4"><Gallery images={p.gallery} title={p.title} controls /></div>
+    )}
+    {p.image && !p.video && !p.gallery && (
       <img src={`${base}/projects/${p.image}`} alt={`Screenshot of ${p.title}`} class="tile mt-10 w-full" />
     )}
 
