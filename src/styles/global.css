@@ -1,0 +1,121 @@
+/* Global styles and design tokens.
+   Colours are CSS variables so dark and light mode only swap variables.
+   Change a colour here and it updates the whole site. */
+@import "tailwindcss";
+/* Fonts are imported in src/layouts/Base.astro (latin subset only, self-hosted). */
+
+/* Use the .dark class (set by the theme toggle) for dark: utilities */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Light mode (reference 5: cool grey board, white tiles) */
+  --bg: #e8ebf0;
+  --surface: #ffffff;
+  --surface-2: #f3f5f9;
+  --line: #d2d8e2;
+  --ink: #0a1120;
+  --muted: #4a5670;
+  --signal: #1a5bd6;
+  --signal-ink: #ffffff;
+  --glow: #0e8a9a;
+  --grid: rgba(10, 17, 32, 0.05);
+}
+.dark {
+  /* Dark mode (references 1 to 3: deep navy, electric blue) */
+  --bg: #060a13;
+  --surface: #0c1424;
+  --surface-2: #111b30;
+  --line: #1c2840;
+  --ink: #e9eef8;
+  --muted: #9aa8c3;
+  --signal: #4d94ff;
+  --signal-ink: #04101f;
+  --glow: #57d9e8;
+  --grid: rgba(120, 160, 255, 0.06);
+}
+
+@theme {
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-sans: "Manrope Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
+  --color-glow: var(--glow);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  color-scheme: light;
+}
+html.dark { color-scheme: dark; }
+
+body {
+  background-color: var(--bg);
+  /* faint engineering grid, as in reference 2 */
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Reusable pieces live in the components layer so Tailwind utilities
+   (like bg-signal) can still override them on a single element. */
+@layer components {
+/* A bento tile: 1px frame like reference 1, medium radius */
+.tile {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+a.tile, .tile-hover { transition: border-color .2s ease, transform .2s ease; }
+a.tile:hover, .tile-hover:hover { border-color: var(--signal); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: .2rem .7rem;
+  font-size: .8125rem;
+  line-height: 1.4;
+}
+}
+
+/* Scroll reveal: elements with [data-reveal] fade in once */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+[data-reveal].is-in { opacity: 1; transform: none; }
+.no-js [data-reveal] { opacity: 1; transform: none; }
+
+/* Hero entrance (the one orchestrated moment) */
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+.hero-in { animation: rise .8s cubic-bezier(.2,.7,.2,1) both; }
+.hero-in-2 { animation-delay: .15s; }
+.hero-in-3 { animation-delay: .3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  [data-reveal] { opacity: 1; transform: none; }
+}

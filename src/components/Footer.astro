@@ -1,0 +1,10 @@
+---
+import { profile } from '../data/portfolio';
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-line">
+  <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between sm:px-6">
+    <p>&copy; {year} {profile.name}. {profile.role}.</p>
+    <p>Built with Astro and Tailwind CSS.</p>
+  </div>
+</footer>

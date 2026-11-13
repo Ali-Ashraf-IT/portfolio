@@ -1,0 +1,75 @@
+---
+// Sticky header: name, section links, theme toggle, CV button and a mobile menu.
+import { profile } from '../data/portfolio';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#contact', label: 'Contact' },
+];
+// On project pages the anchors must point back to the home page
+const home = `${base}/`;
+---
+<header class="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md">
+  <nav class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6" aria-label="Main">
+    <a href={home} class="font-display text-2xl font-bold tracking-wide uppercase">
+      {profile.name}
+    </a>
+
+    <ul class="ml-auto hidden items-center gap-1 lg:flex">
+      {links.map((l) => (
+        <li><a href={`${home}${l.href}`} class="rounded-lg px-3 py-2 text-sm font-semibold text-muted hover:bg-surface-2 hover:text-ink">{l.label}</a></li>
+      ))}
+    </ul>
+
+    <div class="ml-auto flex items-center gap-2 lg:ml-2">
+      <button id="theme-toggle" type="button" class="grid size-10 place-items-center rounded-lg border border-line text-ink hover:border-signal" aria-label="Switch to light mode">
+        <!-- sun (shown in dark mode) -->
+        <svg class="hidden size-5 dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <!-- moon (shown in light mode) -->
+        <svg class="size-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a href={`${base}/${profile.cv}`} download class="hidden rounded-lg bg-signal px-4 py-2.5 text-sm font-bold text-signal-ink hover:brightness-110 sm:inline-flex">Download CV</a>
+      <button id="menu-toggle" type="button" class="grid size-10 place-items-center rounded-lg border border-line lg:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t border-line bg-bg lg:hidden">
+    <ul class="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
+      {links.map((l) => (
+        <li><a href={`${home}${l.href}`} class="block rounded-lg px-3 py-3 font-semibold hover:bg-surface-2">{l.label}</a></li>
+      ))}
+      <li><a href={`${base}/${profile.cv}`} download class="mt-2 block rounded-lg bg-signal px-3 py-3 text-center font-bold text-signal-ink">Download CV</a></li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  // Theme toggle: remembers the choice in localStorage (if allowed).
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('theme-toggle')!;
+  const syncLabel = () =>
+    themeBtn.setAttribute('aria-label', root.classList.contains('dark') ? 'Switch to light mode' : 'Switch to dark mode');
+  syncLabel();
+  themeBtn.addEventListener('click', () => {
+    const dark = root.classList.toggle('dark');
+    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch { /* storage blocked */ }
+    syncLabel();
+  });
+
+  // Mobile menu: open/close, close after choosing a link or pressing Escape.
+  const menuBtn = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const setOpen = (open: boolean) => {
+    menu.classList.toggle('hidden', !open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+  menuBtn.addEventListener('click', () => setOpen(menu.classList.contains('hidden')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+</script>

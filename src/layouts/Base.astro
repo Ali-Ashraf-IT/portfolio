@@ -1,0 +1,109 @@
+---
+// Base page layout: <head>, SEO tags, theme setup, header and footer.
+// Self-hosted fonts, latin subset only (smaller downloads, no Google request)
+// (package exports add ".css" automatically, so no extension here)
+import '@fontsource-variable/manrope/wght';
+import '@fontsource/big-shoulders-display/latin-700';
+import '@fontsource/big-shoulders-display/latin-900';
+import '../styles/global.css';
+// Preload the heavy display font used by the big hero name, so the text
+// does not jump when the font arrives (reduces layout shift).
+import displayFont from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { profile } from '../data/portfolio';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = `${profile.name} | ${profile.role}`,
+  description = profile.tagline,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`${base}/og.png`, Astro.site);
+
+// Structured data so search engines understand who this page is about
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.role,
+  worksFor: { '@type': 'Organization', name: profile.company },
+  address: { '@type': 'PostalAddress', addressCountry: 'PK' },
+  url: new URL(`${base}/`, Astro.site).href,
+  sameAs: [profile.linkedin, profile.github],
+};
+---
+<!doctype html>
+<html lang="en" class="dark no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
+    <meta name="theme-color" content="#060a13" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Apply saved theme before paint to avoid a flash. Dark is the default. -->
+    <script is:inline>
+      (function () {
+        const root = document.documentElement;
+        root.classList.remove('no-js');
+        const saved = (function () {
+          try { return localStorage.getItem('theme'); } catch { return null; }
+        })();
+        root.classList.toggle('dark', saved ? saved === 'dark' : true);
+      })();
+    </script>
+  </head>
+  <body class="min-h-dvh">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-signal focus:px-4 focus:py-2 focus:text-signal-ink">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Reveal tiles once when they scroll into view.
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-in'));
+      }
+    </script>
+  </body>
+</html>
