@@ -1,0 +1,61 @@
+---
+// Hero: poster-size name (reference 1), portrait with a glowing ring
+// (reference 2), value proposition, two calls to action and a stats row.
+import { profile, stats } from '../data/portfolio';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const [first, ...rest] = profile.name.split(' ');
+const initials = profile.name.split(' ').map((p) => p[0]).join('');
+---
+<section class="relative overflow-hidden" aria-labelledby="hero-name">
+  <div class="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:pt-16">
+    <p class="hero-in flex items-center gap-2 text-sm font-semibold text-muted">
+      <span class="relative flex size-2.5">
+        <span class="absolute inline-flex size-full animate-ping rounded-full bg-glow opacity-60 motion-reduce:hidden"></span>
+        <span class="relative inline-flex size-2.5 rounded-full bg-glow"></span>
+      </span>
+      {profile.openTo}
+    </p>
+
+    <!-- Two lines on phones and tablets, one poster-wide line on large screens -->
+    <h1 id="hero-name" class="hero-in hero-in-2 mt-4 font-display font-black uppercase leading-[0.82] tracking-tight text-[clamp(4.5rem,24vw,13rem)] lg:whitespace-nowrap lg:text-[min(21.5vw,22rem)]">
+      <span class="block lg:inline">{first}</span>
+      <span class="block text-signal lg:inline lg:pl-[0.18em]">{rest.join(' ')}</span>
+    </h1>
+
+    <div class="mt-8 grid items-end gap-10 lg:grid-cols-[1.2fr_1fr]">
+      <div class="hero-in hero-in-3">
+        <p class="font-display text-3xl font-bold uppercase tracking-wide sm:text-4xl">{profile.role}</p>
+        <p class="mt-1 text-muted">at {profile.company} &middot; {profile.location}</p>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed">{profile.tagline}</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href={`${base}/${profile.cv}`} download class="inline-flex items-center gap-2 rounded-xl bg-signal px-6 py-3.5 font-bold text-signal-ink hover:brightness-110">
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+            Download CV
+          </a>
+          <a href="#contact" class="inline-flex items-center rounded-xl border border-line bg-surface px-6 py-3.5 font-bold hover:border-signal">Contact me</a>
+        </div>
+      </div>
+
+      <!-- Portrait. Add your photo in src/data/portfolio.ts (profile.photo). -->
+      <div class="hero-in hero-in-3 relative mx-auto w-full max-w-72 sm:max-w-sm lg:-mt-24 lg:mr-0">
+        <div class="absolute inset-0 rounded-full bg-signal/25 blur-3xl" aria-hidden="true"></div>
+        <div class="relative aspect-square rounded-full border-2 border-glow/70 p-3 shadow-[0_0_60px_-10px_var(--glow)]">
+          {profile.photo ? (
+            <img src={`${base}/${profile.photo}`} alt={`Portrait of ${profile.name}`} width="480" height="480" class="size-full rounded-full object-cover" loading="eager" />
+          ) : (
+            <div class="grid size-full place-items-center rounded-full bg-surface font-display text-8xl font-black text-signal" role="img" aria-label={`${profile.name} monogram`}>{initials}</div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <ul class="mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Key numbers">
+      {stats.map((s) => (
+        <li class="tile p-5" data-reveal>
+          <p class="font-display text-5xl font-black text-signal">{s.value}</p>
+          <p class="mt-1 text-sm font-semibold text-muted">{s.label}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
