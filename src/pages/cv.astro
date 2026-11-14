@@ -1,14 +1,24 @@
 ---
-// CV page (/cv). Same data as the website, laid out as an A4 document.
-// ATS-friendly: one column, real text, standard headings, no tables or icons.
+// CV page (/cv). Same data as the website, laid out as two A4 pages:
+// a dark header band, a grey sidebar (contact, skills, languages, education)
+// and a main column (summary, experience, projects).
+// Real text only (no images of text), standard headings, so ATS parsers can read it.
 // public/Ashraf_CV.pdf is printed from this page (see scripts/cv-pdf.ps1).
 import '@fontsource-variable/manrope/wght';
-import { profile, experience, education, certifications, languages, cv } from '../data/portfolio';
+import { profile, experience, education, certifications, languages, cv, stats, projects } from '../data/portfolio';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const site = new URL(`${base}/`, Astro.site).href.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const strip = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
-const contact = [profile.location, profile.email, profile.phone, strip(profile.linkedin), strip(profile.github), site].filter(Boolean);
+const contact = [
+  { label: 'Location', value: profile.location },
+  { label: 'Email', value: profile.email },
+  { label: 'Phone', value: profile.phone },
+  { label: 'LinkedIn', value: strip(profile.linkedin) },
+  { label: 'GitHub', value: strip(profile.github) },
+  { label: 'Portfolio', value: site },
+].filter((c) => c.value);
+const glance = stats.filter((s) => ['3+', '250+', '334'].includes(s.value));
 ---
 <!doctype html>
 <html lang="en">
@@ -21,36 +31,82 @@ const contact = [profile.location, profile.email, profile.phone, strip(profile.l
   <style>
     @page { size: A4; margin: 0; }
     * { box-sizing: border-box; }
-    html { background: #e8ebf0; }
-    body { margin: 0; color: #111827; font-family: "Manrope Variable", Arial, sans-serif; font-size: 9.1pt; line-height: 1.32; }
-    .page { width: 210mm; min-height: 297mm; margin: 24px auto; background: #fff; padding: 10mm 14mm 6mm; box-shadow: 0 10px 40px -20px rgba(0,0,0,.4); }
-    header { border-bottom: 2.5pt solid #3a3f4b; padding-bottom: 8pt; }
-    h1 { font-size: 23pt; line-height: 1; margin: 0; letter-spacing: -.01em; color: #1f2937; }
-    .title { margin: 4pt 0 6pt; font-size: 11.5pt; font-weight: 700; color: #1a5bd6; }
-    .contact { margin: 0; color: #374151; font-size: 9pt; }
-    .contact { display: flex; flex-wrap: wrap; row-gap: 1pt; }
-    .contact span { white-space: nowrap; } /* never break an email or URL */
-    .contact span + span::before { white-space: pre; }
-    .contact span + span::before { content: " | "; color: #9ca3af; }
-    h2 { font-size: 10.5pt; letter-spacing: .08em; text-transform: uppercase; color: #3a3f4b; margin: 7.5pt 0 2.5pt; padding-bottom: 1.5pt; border-bottom: .75pt solid #d1d5db; }
+    html { background: #e8ebf0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { margin: 0; color: #1f2937; font-family: "Manrope Variable", Arial, sans-serif; font-size: 10pt; line-height: 1.42; }
     p { margin: 0; }
-    ul { margin: 2pt 0 0; padding-left: 13pt; }
-    li { margin: 1pt 0; }
-    .row { display: flex; justify-content: space-between; gap: 8pt; align-items: baseline; }
-    .job { margin-top: 6pt; }
-    .job h3, .item h3 { font-size: 10.5pt; margin: 0; }
+    ul { margin: 3pt 0 0; padding-left: 12pt; }
+    li { margin: 2.6pt 0; padding-left: 1pt; }
+    li::marker { color: #1a5bd6; }
+
+    /* One .sheet = one A4 page. The grey sidebar is drawn as a background so it runs full height. */
+    .sheet { position: relative; width: 210mm; height: 297mm; margin: 24px auto; overflow: hidden; background: linear-gradient(to right, #e6e9ee 0 68mm, #fff 68mm); box-shadow: 0 10px 40px -20px rgba(0,0,0,.4); display: flex; flex-direction: column; }
+    .band { display: grid; grid-template-columns: 68mm 1fr; align-items: center; background: #2b303c; color: #fff; }
+    .band.big { height: 48mm; }
+    .band.slim { height: 17mm; }
+    .band-photo { display: grid; place-items: center; }
+    .photo { width: 34mm; height: 34mm; border-radius: 50%; object-fit: cover; border: 2pt solid #e6e9ee; display: block; }
+    .band-text { padding: 0 12mm 0 9mm; }
+    h1 { margin: 0; font-size: 26pt; line-height: 1; letter-spacing: -.01em; font-weight: 800; }
+    .title { margin-top: 6pt; font-size: 10.5pt; letter-spacing: .14em; text-transform: uppercase; color: #c7cfdd; }
+    .slim .band-text { font-size: 10pt; letter-spacing: .12em; text-transform: uppercase; color: #c7cfdd; }
+    .slim .band-text strong { color: #fff; letter-spacing: .02em; font-size: 12pt; text-transform: none; margin-right: 8pt; }
+
+    .body { flex: 1; display: grid; grid-template-columns: 68mm 1fr; min-height: 0; }
+    .side { padding: 9mm 7mm 8mm 8mm; font-size: 9.2pt; }
+    .main { padding: 8mm 12mm 8mm 9mm; }
+
+    h2 { margin: 0 0 5pt; font-size: 10.5pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #2b303c; display: flex; align-items: center; gap: 6pt; }
+    .main h2::after { content: ""; flex: 1; height: .75pt; background: #cdd3dc; }
+    .side h2 { padding-bottom: 3pt; border-bottom: 1.5pt solid #2b303c; }
+    section + section { margin-top: 15pt; }
+
+    .contact div { margin: 4pt 0; overflow-wrap: anywhere; }
+    .contact b, .skills b { display: block; font-size: 7.4pt; letter-spacing: .1em; text-transform: uppercase; color: #5b6472; font-weight: 700; }
+    .skills .grp { margin: 0 0 8.5pt; }
+    .skills p { color: #1f2937; }
+    .glance { display: grid; gap: 6pt; }
+    .glance div { padding: 6pt 8pt; background: #fff; border-left: 3pt solid #1a5bd6; border-radius: 2pt; }
+    .glance strong { display: block; font-size: 15pt; line-height: 1; color: #2b303c; }
+    .glance span { font-size: 8pt; color: #4b5563; }
+    .edu { margin: 0 0 6pt; }
+    .edu strong { display: block; }
     .muted { color: #4b5563; }
-    .date { white-space: nowrap; color: #374151; font-weight: 600; font-size: 9.5pt; }
-    .skills p { margin: 1.5pt 0; }
-    .item { margin-top: 4pt; }
+
+    .summary { font-size: 10.4pt; line-height: 1.55; }
+    .job + .job, .proj + .proj { margin-top: 13pt; }
+    .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8pt; }
+    .job h3, .proj h3 { margin: 0; font-size: 10.6pt; color: #111827; }
+    .company { color: #1a5bd6; font-weight: 700; font-size: 9.6pt; }
+    .date { white-space: nowrap; color: #4b5563; font-weight: 600; font-size: 8.8pt; }
+    .stack { margin-top: 3pt; font-size: 8.8pt; color: #4b5563; }
+    .stack b { color: #2b303c; }
+    .proj p { margin-top: 2pt; }
+    .page-no { margin-top: auto; padding-top: 6pt; font-size: 7.6pt; color: #8a93a1; text-align: right; }
+
     .print-bar { max-width: 210mm; margin: 16px auto 0; display: flex; gap: 8px; justify-content: flex-end; font-family: Arial, sans-serif; }
     .print-bar a { background: #1a5bd6; color: #fff; text-decoration: none; padding: 9px 16px; border-radius: 999px; font-weight: 700; font-size: 14px; }
     .print-bar a.ghost { background: #fff; color: #111827; border: 1px solid #d1d5db; }
-    @media print { html { background: #fff; } .page { margin: 0; box-shadow: none; } .print-bar { display: none; } }
-    @media screen and (max-width: 780px) { .page { width: auto; min-height: 0; margin: 12px; padding: 20px; } .row { flex-direction: column; gap: 0; } }
-    /* When shown inside the home-page preview frame */
+
+    @media print {
+      html { background: #fff; }
+      .sheet { margin: 0; box-shadow: none; break-after: page; page-break-after: always; }
+      .sheet:last-of-type { break-after: auto; page-break-after: auto; }
+      .print-bar { display: none; }
+    }
+    /* Phones: stack everything in one column and drop the fixed page size */
+    @media screen and (max-width: 780px) {
+      .sheet { width: auto; height: auto; margin: 12px; background: #fff; }
+      .band, .band.big, .band.slim { display: block; height: auto; padding: 16px; }
+      .band-photo { margin-bottom: 10px; justify-content: start; display: block; }
+      .band-text { padding: 0; }
+      .body { display: block; }
+      .side { background: #e6e9ee; padding: 16px; }
+      .main { padding: 16px; }
+      .row { flex-direction: column; gap: 0; }
+    }
+    /* Inside the home-page preview frame (shows page 1 only) */
     html.embedded { background: #fff; }
-    html.embedded .page { margin: 0; box-shadow: none; }
+    html.embedded .sheet { margin: 0; box-shadow: none; }
     html.embedded .print-bar { display: none; }
   </style>
   <script is:inline>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
@@ -61,63 +117,97 @@ const contact = [profile.location, profile.email, profile.phone, strip(profile.l
     <a href={`${base}/${profile.cv}`} download>Download PDF</a>
   </nav>
 
-  <main class="page">
-    <header>
-      <h1>{profile.name}</h1>
-      <p class="title">{profile.role}</p>
-      <p class="contact">{contact.map((c) => <span>{c}</span>)}</p>
+  <!-- PAGE 1 -->
+  <div class="sheet">
+    <header class="band big">
+      <div class="band-photo"><img class="photo" src={`${base}/ali-cv.jpg`} alt={`Photo of ${profile.name}`} width="600" height="600" /></div>
+      <div class="band-text">
+        <h1>{profile.name}</h1>
+        <p class="title">{profile.role}</p>
+      </div>
     </header>
+    <div class="body">
+      <aside class="side">
+        <section class="contact">
+          <h2>Contact</h2>
+          {contact.map((c) => <div><b>{c.label}</b>{c.value}</div>)}
+        </section>
+        <section class="skills">
+          <h2>Skills</h2>
+          {cv.skills.map((g) => <div class="grp"><b>{g.group}</b><p>{g.line}</p></div>)}
+        </section>
+        <section>
+          <h2>Languages</h2>
+          <p>{languages.join(', ')}</p>
+        </section>
+      </aside>
+      <div class="main">
+        <section>
+          <h2>Summary</h2>
+          <p class="summary">{cv.summary}</p>
+        </section>
+        <section>
+          <h2>Experience</h2>
+          {experience.map((job) => (
+            <div class="job">
+              <div class="row">
+                <h3>{job.role}</h3>
+                <span class="date">{job.start} – {job.end}</span>
+              </div>
+              <p class="company">{job.company}{job.place && `, ${job.place}`}</p>
+              <ul>{job.points.map((pt) => <li>{pt}</li>)}</ul>
+            </div>
+          ))}
+        </section>
+      </div>
+    </div>
+  </div>
 
-    <section>
-      <h2>Summary</h2>
-      <p>{cv.summary}</p>
-    </section>
-
-    <section class="skills">
-      <h2>Skills</h2>
-      {cv.skills.map((g) => <p><strong>{g.group}:</strong> {g.line}</p>)}
-    </section>
-
-    <section>
-      <h2>Experience</h2>
-      {experience.map((job) => (
-        <div class="job">
-          <div class="row">
-            <h3>{job.role}, {job.company}{job.place && `, ${job.place}`}</h3>
-            <span class="date">{job.start} – {job.end}</span>
+  <!-- PAGE 2 -->
+  <div class="sheet">
+    <header class="band slim">
+      <div class="band-photo"></div>
+      <div class="band-text"><strong>{profile.name}</strong>{profile.role}</div>
+    </header>
+    <div class="body">
+      <aside class="side">
+        <section>
+          <h2>Education</h2>
+          {education.map((e) => (
+            <div class="edu"><strong>{e.title}</strong><span class="muted">{e.place}</span><br /><span class="muted">{e.detail}</span></div>
+          ))}
+        </section>
+        {certifications.length > 0 && (
+          <section>
+            <h2>Certifications</h2>
+            {certifications.map((c) => (
+              <div class="edu"><strong>{c.title}</strong><span class="muted">{c.issuer}{c.year && `, ${c.year}`}</span></div>
+            ))}
+          </section>
+        )}
+        <section>
+          <h2>At a glance</h2>
+          <div class="glance">
+            {glance.map((s) => <div><strong>{s.value}</strong><span>{s.label}</span></div>)}
           </div>
-          <ul>{(cv.experience[job.company] ?? job.points).map((pt) => <li>{pt}</li>)}</ul>
-        </div>
-      ))}
-    </section>
-
-    <section>
-      <h2>Projects</h2>
-      {cv.projects.map((p) => (
-        <div class="item"><p><strong>{p.name}.</strong> {p.line}</p></div>
-      ))}
-    </section>
-
-    <section>
-      <h2>Education</h2>
-      {education.map((e) => (
-        <div class="item row"><h3>{e.title}, {e.place}</h3><span class="date">{e.detail}</span></div>
-      ))}
-    </section>
-
-    {certifications.length > 0 && (
-      <section>
-        <h2>Certifications</h2>
-        {certifications.map((c) => (
-          <div class="item row"><p><strong>{c.title}</strong>, {c.issuer}</p>{c.year && <span class="date">{c.year}</span>}</div>
-        ))}
-      </section>
-    )}
-
-    <section>
-      <h2>Languages</h2>
-      <p>{languages.join(', ')}</p>
-    </section>
-  </main>
+        </section>
+      </aside>
+      <div class="main">
+        <section>
+          <h2>Selected projects</h2>
+          {projects.map((p) => (
+            <div class="proj">
+              <div class="row">
+                <h3>{p.title}</h3>
+                <span class="date">{p.date}</span>
+              </div>
+              <p>{p.summary}</p>
+              <p class="stack"><b>Stack:</b> {p.stack.join(', ')}{p.links.length > 0 && ` | ${strip(p.links[0]!.href)}`}</p>
+            </div>
+          ))}
+        </section>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
