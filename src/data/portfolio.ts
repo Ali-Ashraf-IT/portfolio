@@ -53,7 +53,7 @@ export const profile = {
   phone: '+92 311 3222527',
   linkedin: 'https://www.linkedin.com/in/ali-ashraf-053b03bb',
   github: 'https://github.com/ali-ashraf-it',
-  photo: 'ali.jpg', // cropped from the GitHub profile picture; replace with a sharper photo when you have one
+  photo: 'ali-cv.jpg', // same square portrait as the CV (600x600)
   cv: 'Ashraf_CV.pdf', // file in /public/
   openTo: 'Open to infrastructure, automation and security operations roles, on-site or remote.',
 };
